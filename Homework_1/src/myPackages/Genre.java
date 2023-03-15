@@ -2,7 +2,6 @@ package myPackages;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import myPackages.myException.MyException;
 
 public class Genre {
@@ -40,14 +39,4 @@ public class Genre {
         result = movies.stream().mapToDouble(Movie::getLength).sum();
         return result / movies.size();
     }
-
-    public List<Movie> getMoviesByGenre(String genre) {
-        List<Movie> a = (List)this.getMovies().stream().filter((p) -> {
-            return p.getGenreName().equals(genre);
-        }).collect(Collectors.toList());
-        return a;
-    }
-
-
-
 }
