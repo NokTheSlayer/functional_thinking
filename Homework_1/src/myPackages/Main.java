@@ -13,8 +13,8 @@ public class Main {
     public Main() {
     }
 
-    public static List<FilmGenres> readData(String dataPath) throws IOException, MyException {
-        List<FilmGenres> genres = new ArrayList();
+    public static List<Genre> readData(String dataPath) throws IOException, MyException {
+        List<Genre> genres = new ArrayList();
         BufferedReader br = new BufferedReader(new FileReader(dataPath));
         int iteration = 0;
 
@@ -24,21 +24,21 @@ public class Main {
                 boolean filmExist = false;
                 ++iteration;
                 String[] values = line.split("\\s+");
-                FilmList filmList = new FilmList(values[0] + " " + values[1], Integer.parseInt(values[2]), values[3], Float.parseFloat(values[4]));
+                Movie movie = new Movie(values[0] + " " + values[1], Integer.parseInt(values[2]), values[3], Float.parseFloat(values[4]));
                 Iterator var8 = genres.iterator();
 
                 while(var8.hasNext()) {
-                    FilmGenres filmGenres = (FilmGenres)var8.next();
-                    if (filmGenres.getGenre().equals(values[3])) {
-                        filmGenres.addChildToClass(filmList);
+                    Genre filmGenres = (Genre)var8.next();
+                    if (filmGenres.getName().equals(values[3])) {
+                        filmGenres.addMovie(movie);
                         filmExist = true;
                         break;
                     }
                 }
 
                 if (!filmExist) {
-                    FilmGenres filmGenres = new FilmGenres(values[3]);
-                    filmGenres.addChildToClass(filmList);
+                    Genre filmGenres = new Genre(values[3]);
+                    filmGenres.addMovie(movie);
                     genres.add(filmGenres);
                 }
             } catch (NumberFormatException var10) {
@@ -50,7 +50,7 @@ public class Main {
 
         br.close();
         if (genres.isEmpty()) {
-            throw new MyException("В файле \"" + dataPath + "\" не найдено информации об учениках");
+            throw new MyException("В файле \"" + dataPath + "\" не найдено информации об фильмах");
         } else {
             return genres;
         }
@@ -59,7 +59,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             String dataPath = "films_data.txt";
-            List<FilmGenres> genres = readData(dataPath);
+            List<Genre> genres = readData(dataPath);
             Scanner sc = new Scanner(System.in);
             label60:
             while(true) {
@@ -71,7 +71,7 @@ public class Main {
                         ">>>");
                 int action = sc.nextInt();
                 Iterator var11;
-                FilmGenres filmGenres;
+                Genre genre;
                 Stream var10000;
                 PrintStream var10001;
 
@@ -80,8 +80,8 @@ public class Main {
                         var11 = genres.iterator();
 
                         while(var11.hasNext()) {
-                            filmGenres = (FilmGenres) var11.next();
-                            System.out.println("Жанр фильма: " + filmGenres.getGenre() + " Ср. арифметическое: " + filmGenres.averageValueByMarks());
+                            genre = (Genre) var11.next();
+                            System.out.println("Жанр фильма: " + genre.getName() + " Ср. арифметическое: " + genre.getAverageValueByYear());
                         }
 
                         System.out.println("__________________");
@@ -90,9 +90,9 @@ public class Main {
                         var11 = genres.iterator();
 
                         while(var11.hasNext()) {
-                            filmGenres = (FilmGenres)var11.next();
-                            System.out.println("Жанр: " + filmGenres.getGenre());
-                            var10000 = filmGenres.getFilmListStorage().stream().sorted();
+                            genre = (Genre)var11.next();
+                            System.out.println("Жанр: " + genre.getName());
+                            var10000 = genre.getMovies().stream().sorted();
                             var10001 = System.out;
                             var10000.forEach(var10001::println);
                             System.out.println();
@@ -109,9 +109,9 @@ public class Main {
                             }
 
                             for(Iterator var6 = genres.iterator(); var6.hasNext(); System.out.println()) {
-                                filmGenres = (FilmGenres) var6.next();
-                                System.out.println("Жанр: " + filmGenres.getGenre());
-                                List<FilmList> filteredList = filmGenres.filterFilmListByFilmGenres(title);
+                                genre = (Genre) var6.next();
+                                System.out.println("Жанр: " + genre.getName());
+                                List<Movie> filteredList = genre.getMoviesByGenre(title);
                                 if (filteredList.isEmpty()) {
                                     System.out.println("Нет такоих фильмов.");
                                 } else {

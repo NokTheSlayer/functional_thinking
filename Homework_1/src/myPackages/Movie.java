@@ -2,14 +2,14 @@ package myPackages;
 
 import myPackages.myException.MyException;
 
-public class FilmList implements Comparable<FilmList>{
+public class Movie implements Comparable<Movie>{
     private String fullTitle;
     private String genreName;
 
     private int year;
     private float length;
 
-    public FilmList(String fullTitle, int year, String genreName, float length) throws MyException {
+    public Movie(String fullTitle, int year, String genreName, float length) throws MyException {
         if (length >= 0) {
             this.fullTitle = fullTitle;
             this.year = year;
@@ -53,10 +53,12 @@ public class FilmList implements Comparable<FilmList>{
     }
 
 
-    public int compareTo(FilmList filmList) {
-        return this.year - filmList.getYear();
+    @Override
+    public int compareTo(Movie movie) {
+        return this.year - movie.getYear();
     }
 
+    @Override
     public String toString() {
         return "Название: " + this.getFullTitle() + ", Жанр: " + this.getGenreName() + ", Длительность: " + this.getLength() + ", Год: " + this.getYear();
     }
