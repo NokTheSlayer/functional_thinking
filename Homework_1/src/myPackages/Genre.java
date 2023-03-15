@@ -1,7 +1,6 @@
 package myPackages;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import myPackages.myException.MyException;
@@ -38,13 +37,8 @@ public class Genre {
 
     public double getAverageValueByYear() {
         double result = 0.0;
-
-        Movie movie;
-        for(Iterator var3 = this.movies.iterator(); var3.hasNext(); result += (double) movie.getLength()) {
-            movie = (Movie)var3.next();
-        }
-
-        return result / (double)this.movies.size();
+        result = movies.stream().mapToDouble(Movie::getLength).sum();
+        return result / movies.size();
     }
 
     public List<Movie> getMoviesByGenre(String genre) {

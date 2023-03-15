@@ -28,18 +28,18 @@ public class Main {
                 Iterator var8 = genres.iterator();
 
                 while(var8.hasNext()) {
-                    Genre filmGenres = (Genre)var8.next();
-                    if (filmGenres.getName().equals(values[3])) {
-                        filmGenres.addMovie(movie);
+                    Genre genre = (Genre)var8.next();
+                    if (genre.getName().equals(values[3])) {
+                        genre.addMovie(movie);
                         filmExist = true;
                         break;
                     }
                 }
 
                 if (!filmExist) {
-                    Genre filmGenres = new Genre(values[3]);
-                    filmGenres.addMovie(movie);
-                    genres.add(filmGenres);
+                    Genre genre = new Genre(values[3]);
+                    genre.addMovie(movie);
+                    genres.add(genre);
                 }
             } catch (NumberFormatException var10) {
                 System.out.println("Ошибка в формате данных файла \"" + dataPath + "\". Запись " + (iteration - 1));
@@ -56,12 +56,30 @@ public class Main {
         }
     }
 
+    public static void getAllGenresAverage(List<Genre> genres){
+        genres.forEach(genre ->
+            System.out.println("Жанр фильма: " + genre.getName() + " Ср. арифметическое: " + genre.getAverageValueByYear())
+        );
+    }
+
+    public static void getSortedMoviesByYearByEachGenre(List<Genre> genres){
+        for (Genre genre : genres){
+            System.out.println("Жанр: " + genre.getName());
+            genre.getMovies().stream().sorted().forEach(System.out::println);
+        }
+    }
+
+    public static void getInfoMoviesByGenre(List<Genre> genres, String name){
+        genres.stream().filter(genre -> genre.getName().equals(name)).forEach(genre ->
+                genre.getMovies().forEach(System.out::println)
+        );
+    }
+
     public static void main(String[] args) {
         try {
             String dataPath = "films_data.txt";
             List<Genre> genres = readData(dataPath);
             Scanner sc = new Scanner(System.in);
-            label60:
             while(true) {
                 System.out.print("Выберите действие, которое хотите выполнить:\n" +
                         "1. Вывести для каждого жанра среднее арифметическое по длительности фильма\n" +
@@ -70,56 +88,22 @@ public class Main {
                         "4. Выход\n" +
                         ">>>");
                 int action = sc.nextInt();
-                Iterator var11;
-                Genre genre;
-                Stream var10000;
-                PrintStream var10001;
-
                 switch (action) {
                     case 1:
-                        var11 = genres.iterator();
-
-                        while(var11.hasNext()) {
-                            genre = (Genre) var11.next();
-                            System.out.println("Жанр фильма: " + genre.getName() + " Ср. арифметическое: " + genre.getAverageValueByYear());
-                        }
-
-                        System.out.println("__________________");
+                        getAllGenresAverage(genres);
                         break;
                     case 2:
-                        var11 = genres.iterator();
-
-                        while(var11.hasNext()) {
-                            genre = (Genre)var11.next();
-                            System.out.println("Жанр: " + genre.getName());
-                            var10000 = genre.getMovies().stream().sorted();
-                            var10001 = System.out;
-                            var10000.forEach(var10001::println);
-                            System.out.println();
-                        }
-
-                        System.out.println("__________________");
+                        getSortedMoviesByYearByEachGenre(genres);
                         break;
                     case 3:
                         while(true) {
-                            System.out.print("Вывести название жанра или введите 'назад' чтобы вернуться назад\n>>>\n");
-                            String title = sc.next();
-                            if (title.toLowerCase().equals("назад")) {
+                            System.out.print("Вывести название жанра или введите 'назад' чтобы выйти\n>>>");
+                            String genreName = sc.next();
+                            if (genreName.toLowerCase().equals("назад")) {
                                 System.out.println("__________________");
+                                break;
                             }
-
-                            for(Iterator var6 = genres.iterator(); var6.hasNext(); System.out.println()) {
-                                genre = (Genre) var6.next();
-                                System.out.println("Жанр: " + genre.getName());
-                                List<Movie> filteredList = genre.getMoviesByGenre(title);
-                                if (filteredList.isEmpty()) {
-                                    System.out.println("Нет такоих фильмов.");
-                                } else {
-                                    var10000 = filteredList.stream().sorted();
-                                    var10001 = System.out;
-                                    var10000.forEach(var10001::println);
-                                }
-                            }
+                            getInfoMoviesByGenre(genres, genreName);
                         }
                     case 4:
                         return;
