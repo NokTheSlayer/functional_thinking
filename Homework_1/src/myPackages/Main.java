@@ -57,8 +57,8 @@ public class Main {
 
     public static void getAllGenresAverage(List<Genre> genres){
         genres.forEach(genre ->
-            System.out.println("Жанр фильма: " + genre.getName() + " Ср. арифметическое: " + genre.getAverageValueByYear())
-        );
+            System.out.println("Жанр фильма: " + genre.getName() + " Ср. продолжительность: " + Math.round(genre.getAverageValueByYear())
+        ));
     }
 
     public static void getSortedMoviesByYearByEachGenre(List<Genre> genres){
@@ -81,9 +81,9 @@ public class Main {
             Scanner sc = new Scanner(System.in);
             while(true) {
                 System.out.print("Выберите действие, которое хотите выполнить:\n" +
-                        "1. Вывести для каждого жанра среднее арифметическое по длительности фильма\n" +
-                        "2. Вывести названия фильмов, упорядоченные по году, для каждого жанра\n" +
-                        "3. Вывести информацию о фильме и их длительность введенному жанру\n" +
+                        "1. Вывести для каждого жанра среднюю продолжительность фильма\n" +
+                        "2. Вывести список фильмов, упорядоченный по году, для каждого жанра\n" +
+                        "3. Вывести информацию о фильме и их длительность по введенному жанру\n" +
                         "4. Выход\n" +
                         ">>>");
                 int action = sc.nextInt();
